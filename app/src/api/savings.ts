@@ -21,10 +21,9 @@ export interface SavingsGoal {
 }
 
 export const savings = {
-  list: () => api<SavingsGoal[]>("GET", "/savings"),
+  list: () => api<SavingsGoal[]>('/savings'),
 
-  get: (goalId: number) =>
-    api<SavingsGoal>("GET", `/savings/${goalId}`),
+  get: (goalId: number) => api<SavingsGoal>(`/savings/${goalId}`),
 
   create: (data: {
     name: string;
@@ -32,46 +31,40 @@ export const savings = {
     currency?: string;
     deadline?: string;
     current_amount?: number;
-  }) => api<{ id: number }>("POST", "/savings", { body: data }),
+  }) => api<{ id: number }>('/savings', { method: 'POST', body: data }),
 
   update: (
     goalId: number,
-    data: Partial<Omit<SavingsGoal, "id" | "created_at">>
-  ) => api<{ message: string }>("PATCH", `/savings/${goalId}`, { body: data }),
+    data: Partial<Omit<SavingsGoal, 'id' | 'created_at'>>
+  ) => api<{ message: string }>(`/savings/${goalId}`, { method: 'PATCH', body: data }),
 
   contribute: (goalId: number, amount: number) =>
     api<{ message: string; current_amount: number; status: string }>(
-      "POST",
       `/savings/${goalId}/contribute`,
-      { body: { amount } }
+      { method: 'POST', body: { amount } }
     ),
 
-  delete: (goalId: number) =>
-    api<{ message: string }>("DELETE", `/savings/${goalId}`),
+  delete: (goalId: number) => api<{ message: string }>(`/savings/${goalId}`, { method: 'DELETE' }),
 
-  listMilestones: (goalId: number) =>
-    api<SavingsMilestone[]>("GET", `/savings/${goalId}/milestones`),
+  listMilestones: (goalId: number) => api<SavingsMilestone[]>(`/savings/${goalId}/milestones`),
 
   addMilestone: (
     goalId: number,
     data: { title: string; target_amount: number }
-  ) =>
-    api<{ id: number }>("POST", `/savings/${goalId}/milestones`, { body: data }),
+  ) => api<{ id: number }>(`/savings/${goalId}/milestones`, { method: 'POST', body: data }),
 
   updateMilestone: (
     goalId: number,
     milestoneId: number,
-    data: Partial<Pick<SavingsMilestone, "title" | "target_amount">>
+    data: Partial<Pick<SavingsMilestone, 'title' | 'target_amount'>>
   ) =>
-    api<{ message: string }>(
-      "PATCH",
-      `/savings/${goalId}/milestones/${milestoneId}`,
-      { body: data }
-    ),
+    api<{ message: string }>(`/savings/${goalId}/milestones/${milestoneId}`, {
+      method: 'PATCH',
+      body: data,
+    }),
 
   deleteMilestone: (goalId: number, milestoneId: number) =>
-    api<{ message: string }>(
-      "DELETE",
-      `/savings/${goalId}/milestones/${milestoneId}`
-    ),
+    api<{ message: string }>(`/savings/${goalId}/milestones/${milestoneId}`, {
+      method: 'DELETE',
+    }),
 };
